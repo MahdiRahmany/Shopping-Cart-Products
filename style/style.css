@@ -1,0 +1,79 @@
+@import url("https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap");
+
+:root {
+  --primaryColor: #6d28d9;
+  --secondaryColor: #ede9fe;
+  --mainWhite: #fff;
+  --mainBlack: #222;
+  --mainGrey: #7c7c7c;
+  --mainSpacing: 0.1rem;
+  --mainTransition: all 0.3s linear;
+  --mainRed: #db2777;
+  --bodyColor: #f6f6f6;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  color: var(--mainBlack);
+  background: var(--mainWhite);
+  font-family: "Lato", sans-serif;
+  background-color: var(--bodyColor);
+  position: relative;
+}
+
+/* Navbar */
+.navbar {
+  background-color: var(--secondaryColor);
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.navbar-center {
+  max-width: 1170px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.menu-icon {
+  color: var(--primaryColor);
+  cursor: pointer;
+}
+
+.nav-title {
+  color: var(--mainBlack);
+}
+
+.cart-btn {
+  color: var(--primaryColor);
+  position: relative;
+  cursor: pointer;
+}
+
+.menu-icon i,
+.cart-btn i {
+  font-size: 1.5rem;
+}
+
+.cart-items {
+  position: absolute;
+  background-color: var(--mainRed);
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 100%;
+  color: var(--mainWhite);
+  font-size: 0.75rem;
+  top: -8px;
+  right: -8px;
+}
