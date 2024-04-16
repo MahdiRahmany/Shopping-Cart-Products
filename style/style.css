@@ -133,6 +133,7 @@ body {
   font-weight: bold;
   padding: 10px 25px;
   margin-top: 1rem;
+  cursor: pointer;
 }
 
 /* cart modal */
