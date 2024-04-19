@@ -5,10 +5,14 @@ const cartModal = document.querySelector(".cart");
 const backDrop = document.querySelector(".backdrop");
 const closeModal = document.querySelector(".cart-item-confirm");
 
+const addToCartBtns = document.querySelectorAll(".add-to-cart");
+
 const productsDOM = document.querySelector(".products-center");
 
+let cart = [];
 // get products
 class Products {
+  // get from api end point !
   getProducts() {
     return productsData;
   }
@@ -31,9 +35,35 @@ class UI {
         <p class="products-title">${item.title}</p>
         <p class="product-price">${item.price} &dollar;</p>
       </div>
-      <button class="btn add-to-cart" data-id=${item.id}><i class="fa-solid fa-cart-shopping"></i> add to cart</button>
+      <button class="btn add-to-cart" data-id=${item.id}></i>add to cart</button>
     </section>`;
       productsDOM.innerHTML = result;
+    });
+  }
+  getAddToCartBtn() {
+    const addToCartBtns = document.querySelectorAll(".add-to-cart");
+    const buttons = [...addToCartBtns];
+
+    buttons.forEach((btn) => {
+      const id = btn.dataset.id;
+      // check if this product id is in cart or not !
+      const isInCart = cart.find((p) => p.id === id);
+      if (isInCart) {
+        btn.innerText = "In Cart";
+        btn.disabled = true;
+      }
+      btn.addEventListener("click", (event) => {
+        event.target.innerText = "In Cart";
+        event.target.disabled = true;
+        // get product from products :
+        const addedProduct = Storage.getProduct(id);
+        // add to cart :
+        cart = [...cart, { ...addedProduct, quantity: 1 }];
+        // save cart to storage :
+        Storage.saveCart(cart);
+        // update cart value :
+        // add to cart item
+      });
     });
   }
 }
@@ -43,6 +73,13 @@ class Storage {
   static saveProducts(products) {
     localStorage.setItem("products", JSON.stringify(products));
   }
+  static getProduct(id) {
+    const _products = JSON.parse(localStorage.getItem("products"));
+    return _products.find((p) => p.id === parseInt(id));
+  }
+  static saveCart(cart) {
+    localStorage.setItem("cart", JSON.stringify(cart));
+  }
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -50,6 +87,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const productsData = products.getProducts();
   const ui = new UI();
   ui.displayProducts(productsData);
+  ui.getAddToCartBtn();
   Storage.saveProducts(productsData);
 });
 
