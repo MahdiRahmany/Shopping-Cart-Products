@@ -100,12 +100,14 @@ body {
   row-gap: 5rem;
 }
 
+/* for orginal  picture size*/
 .product {
   background-color: var(--mainWhite);
   border-radius: 8px;
   display: flex;
   flex-direction: column;
   align-items: center;
+  overflow: hidden;
 }
 
 .product-img {
@@ -113,7 +115,35 @@ body {
   width: 100%;
   min-height: 12rem;
   border-radius: 8px 8px 0 0;
+  height: 260px;
 }
+
+/* for resize and fit picture */
+/* .product {
+  background-color: var(--mainWhite);
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: hidden;
+}
+
+.img-container {
+  width: 100%;
+  padding-top: 100%;
+  position: relative;
+}
+
+.product-img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+} */
+/* end of section */
 
 .product-desc {
   margin-top: 1rem;
