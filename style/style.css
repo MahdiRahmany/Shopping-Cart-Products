@@ -277,6 +277,10 @@ body {
   margin-right: 10px;
 }
 
+.fa-trash-can {
+  cursor: pointer;
+}
+
 @media screen and (max-width: 600px) {
   .cart {
     left: 5% !important;
