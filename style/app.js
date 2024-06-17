@@ -8,6 +8,8 @@ const closeModal = document.querySelector(".cart-item-confirm");
 const addToCartBtns = document.querySelectorAll(".add-to-cart");
 
 const productsDOM = document.querySelector(".products-center");
+const cartTotal = document.querySelector(".cart-total");
+const cartItems = document.querySelector(".cart-items");
 
 let cart = [];
 // get products
@@ -23,20 +25,21 @@ class UI {
   displayProducts(products) {
     let result = "";
     products.forEach((item) => {
-      result += `<section class="product">
+      result += `<div class="product">
       <div class="img-container">
         <img
           class="product-img"
           src= ${item.imageUrl}
-          alt="p-1"
         />
       </div>
       <div class="product-desc">
         <p class="products-title">${item.title}</p>
         <p class="product-price">${item.price} &dollar;</p>
       </div>
-      <button class="btn add-to-cart" data-id=${item.id}></i>add to cart</button>
-    </section>`;
+      <button class="btn add-to-cart" data-id=${item.id}>
+      Add to cart
+      </button>
+    </div>`;
       productsDOM.innerHTML = result;
     });
   }
@@ -53,7 +56,8 @@ class UI {
         btn.disabled = true;
       }
       btn.addEventListener("click", (event) => {
-        event.target.innerText = "In Cart";
+        event.target.innerHTML =
+          '<i class="fa-solid fa-cart-shopping"></i> In Cart';
         event.target.disabled = true;
         // get product from products :
         const addedProduct = Storage.getProduct(id);
@@ -62,9 +66,23 @@ class UI {
         // save cart to storage :
         Storage.saveCart(cart);
         // update cart value :
+        this.setCartValue(cart);
         // add to cart item
+        // get cart from storage
       });
     });
+  }
+  setCartValue(cart) {
+    // 1. update cart value
+    // 2. add to cart item
+    let tempCartItems = 0;
+    const totalPrice = cart.reduce((acc, curr) => {
+      tempCartItems += curr.quantity;
+      return acc + curr.quantity * curr.price;
+    }, 0);
+    cartTotal.innerText = `total price : ${totalPrice.toFixed(2)} $`;
+    cartItems.innerText = tempCartItems;
+    console.log(tempCartItems);
   }
 }
 
