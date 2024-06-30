@@ -19,6 +19,7 @@ class Products {
     return productsData;
   }
 }
+let buttonsDOM = [];
 
 // display products
 class UI {
@@ -45,6 +46,7 @@ class UI {
   }
   getAddToCartBtn() {
     const addToCartBtns = [...document.querySelectorAll(".add-to-cart")];
+    buttonsDOM = addToCartBtns;
 
     addToCartBtns.forEach((btn) => {
       const id = btn.dataset.id;
@@ -55,7 +57,7 @@ class UI {
         btn.disabled = true;
       }
       btn.addEventListener("click", (event) => {
-        event.target.innerHTML = `<i class="fa-solid fa-cart-shopping"></i> In Cart`;
+        event.target.innerHTML = `In Cart`;
         event.target.disabled = true;
         // get product from products :
         const addedProduct = { ...Storage.getProduct(id), quantity: 1 };
@@ -91,11 +93,11 @@ class UI {
                 <h5>$ ${cartItem.price}</h5>
               </div>
               <div class="cart-item-controller">
-                <i class="fas fa-arrow-up"></i>
+                <i class="fas fa-arrow-up" data-id=${cartItem.id}></i>
                 <p>${cartItem.quantity}</p>
-                <i class="fas fa-arrow-down"></i>
+                <i class="fas fa-arrow-down" data-id=${cartItem.id}></i>
               </div>
-              <i class="fa-solid fa-trash-can"></i>`;
+              <i class="fa-solid fa-trash-can" data-id=${cartItem.id}></i>`;
     cartContent.appendChild(div);
   }
   setupApp() {
@@ -107,10 +109,16 @@ class UI {
     this.setCartValue(cart);
   }
   cartLogic() {
-    clearCart.addEventListener("click", () => {
-      // remove: (DRY) =>
-      cart.forEach((cItem) => this.removeItem(cItem.id));
-    });
+    clearCart.addEventListener("click", () => this.clearCart());
+  }
+  clearCart() {
+    // remove: (DRY) =>
+    cart.forEach((cItem) => this.removeItem(cItem.id));
+    // remove cart content children :
+    while (cartContent.children.length) {
+      cartContent.removeChild(cartContent.children[0]);
+    }
+    closeModalFunction();
   }
   removeItem(id) {
     // update cart
@@ -119,6 +127,16 @@ class UI {
     this.setCartValue(cart);
     // update storage
     Storage.saveCart(cart);
+
+    // get add to cart btns => update text and disable
+    this.getSingleButton(id);
+  }
+  getSingleButton(id) {
+    const button = buttonsDOM.find(
+      (btn) => parseInt(btn.dataset.id) === parseInt(id)
+    );
+    button.innerText = "add to cart";
+    button.disabled = false;
   }
 }
 
@@ -135,7 +153,9 @@ class Storage {
     localStorage.setItem("cart", JSON.stringify(cart));
   }
   static getCart() {
-    return JSON.parse(localStorage.getItem("cart")) ? JSON.parse(localStorage.getItem("cart")) : [];
+    return JSON.parse(localStorage.getItem("cart"))
+      ? JSON.parse(localStorage.getItem("cart"))
+      : [];
   }
 }
 
