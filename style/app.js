@@ -9,6 +9,7 @@ const productsDOM = document.querySelector(".products-center");
 const cartTotal = document.querySelector(".cart-total");
 const cartItems = document.querySelector(".cart-items");
 const cartContent = document.querySelector(".cart-content");
+const clearCart = document.querySelector(".clear-cart");
 
 let cart = [];
 // get products
@@ -48,7 +49,7 @@ class UI {
     addToCartBtns.forEach((btn) => {
       const id = btn.dataset.id;
       // check if this product id is in cart or not !
-      const isInCart = cart.find((p) => p.id === id);
+      const isInCart = cart.find((p) => p.id === parseInt(id));
       if (isInCart) {
         btn.innerText = "In Cart";
         btn.disabled = true;
@@ -80,7 +81,6 @@ class UI {
     }, 0);
     cartTotal.innerText = `total price : ${totalPrice.toFixed(2)} $`;
     cartItems.innerText = tempCartItems;
-    console.log(tempCartItems);
   }
   addCartItem(cartItem) {
     const div = document.createElement("div");
@@ -100,11 +100,25 @@ class UI {
   }
   setupApp() {
     // get cart from storage :
-    cart = Storage.getCart() || [];
+    cart = Storage.getCart();
     // addCArtItem
     cart.forEach((cartItems) => this.addCartItem(cartItems));
     // setvalues : price + items
     this.setCartValue(cart);
+  }
+  cartLogic() {
+    clearCart.addEventListener("click", () => {
+      // remove: (DRY) =>
+      cart.forEach((cItem) => this.removeItem(cItem.id));
+    });
+  }
+  removeItem(id) {
+    // update cart
+    cart = cart.filter((cItem) => cItem.id !== id);
+    // total price and cart items
+    this.setCartValue(cart);
+    // update storage
+    Storage.saveCart(cart);
   }
 }
 
@@ -121,7 +135,7 @@ class Storage {
     localStorage.setItem("cart", JSON.stringify(cart));
   }
   static getCart() {
-    return JSON.parse(localStorage.getItem("cart"));
+    return JSON.parse(localStorage.getItem("cart")) ? JSON.parse(localStorage.getItem("cart")) : [];
   }
 }
 
@@ -133,6 +147,7 @@ document.addEventListener("DOMContentLoaded", () => {
   ui.setupApp();
   ui.displayProducts(productsData);
   ui.getAddToCartBtn();
+  ui.cartLogic();
   Storage.saveProducts(productsData);
 });
 
