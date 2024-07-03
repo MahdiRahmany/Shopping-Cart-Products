@@ -128,6 +128,30 @@ class UI {
         Storage.saveCart(cart);
         // update cart item in UI
         addQuantity.nextElementSibling.innerText = addedItem.quantity;
+      } else if (event.target.classList.contains("fa-trash-can")) {
+        const removeItem = event.target;
+        const _removedItem = cart.find((c) => c.id == removeItem.dataset.id);
+
+        this.removeItem(_removedItem.id);
+        Storage.saveCart(cart);
+        cartContent.removeChild(removeItem.parentElement);
+      } else if (event.target.classList.contains("fa-arrow-down")) {
+        const subQuantity = event.target;
+        const substractedItem = cart.find(
+          (c) => c.id == subQuantity.dataset.id
+        );
+        if (substractedItem.quantity === 1) {
+          this.removeItem(substractedItem.id);
+          cartContent.removeChild(subQuantity.parentElement.parentElement);
+          return;
+        }
+
+        substracted.quantity--;
+        this.setCartValue(cart);
+        // save cart
+        Storage.saveCart(cart);
+        // update cart item in UI
+        subQuantity.previousElementSibling.innerText = substractedItem.quantity;
       }
     });
   }
