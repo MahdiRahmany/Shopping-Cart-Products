@@ -109,7 +109,27 @@ class UI {
     this.setCartValue(cart);
   }
   cartLogic() {
+    // clear cart :
     clearCart.addEventListener("click", () => this.clearCart());
+
+    // cart functionality :
+    cartContent.addEventListener("click", (event) => {
+      if (event.target.classList.contains("fa-arrow-up")) {
+        console.log(event.target.dataset.id);
+        const addQuantity = event.target;
+        // get item from cart
+        const addedItem = cart.find(
+          (cItem) => cItem.id == addQuantity.dataset.id
+        );
+        addedItem.quantity++;
+        // update cart value
+        this.setCartValue(cart);
+        // save cart
+        Storage.saveCart(cart);
+        // update cart item in UI
+        addQuantity.nextElementSibling.innerText = addedItem.quantity;
+      }
+    });
   }
   clearCart() {
     // remove: (DRY) =>
